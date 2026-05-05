@@ -91,3 +91,33 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   read()
 ```
+
+```{r}
+#' Read in one nurses' stress data file.
+#'
+#' @param file_path Path to the data file.
+#' @param n_rows Number of rows to read in.
+#'
+#' @returns Outputs a data.table.
+#'
+read <- function(file_path, n_rows = 100) {
+  dt <- file_path |>
+    fread(nrows = n_rows)
+  setnames(dt, to_snake_case(names(dt)))
+  return(dt)
+}
+```
+
+```{r}
+# Outputs only 100 rows
+here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  read()
+
+# Outputs only 1000 rows
+here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  read(n_rows = 1000)
+
+# Outputs all rows (`Inf` means infinity)
+here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  read(n_rows = Inf)
+```
