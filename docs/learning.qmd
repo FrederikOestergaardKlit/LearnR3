@@ -10,12 +10,13 @@ format: html
 library(tidyverse)
 library(data.table)
 library(here)
-library(snakecase)
+source(here("R/functions.R"))
 ```
 
 ## Importing new data
 
 ```{r}
+#| eval: false
 dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
   fread(nrows = 100)
 setnames(dt, to_snake_case)
@@ -32,6 +33,8 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
 ## Exercise: Reading other file
 
 ```{r}
+#| eval: false
+
 dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   fread()
 setnames(dt, to_snake_case)
@@ -70,6 +73,8 @@ add_numbers(1, 2)
 ## Import 5C's HR data with a function
 
 ```{r}
+#| eval: false
+
 #' Read in one nurses' stress data file.
 #'
 #' @param file_path Path to the data file.
@@ -92,21 +97,7 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   read()
 ```
 
-```{r}
-#' Read in one nurses' stress data file.
-#'
-#' @param file_path Path to the data file.
-#' @param n_rows Number of rows to read in.
-#'
-#' @returns Outputs a data.table.
-#'
-read <- function(file_path, n_rows = 100) {
-  dt <- file_path |>
-    data.table::fread(nrows = n_rows)
-  data.table::setnames(dt, snakecase::to_snake_case)
-  return(dt)
-}
-```
+
 
 ```{r}
 # Outputs only 100 rows
