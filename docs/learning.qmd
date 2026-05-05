@@ -18,7 +18,7 @@ library(snakecase)
 ```{r}
 dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
   fread(nrows = 100)
-setnames(dt, to_snake_case(names(dt)))
+setnames(dt, to_snake_case)
 
 here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
   read_csv(
@@ -34,19 +34,19 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
 ```{r}
 dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   fread()
-setnames(dt, to_snake_case(names(dt)))
+setnames(dt, to_snake_case)
 
 dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   fread(nrows = 100)
-setnames(dt, to_snake_case(names(dt)))
+setnames(dt, to_snake_case)
 
 dt <- here("data-raw/nurses-stress/stress/6b/6B_1587569373/EDA.csv.gz") |>
   fread()
-setnames(dt, to_snake_case(names(dt)))
+setnames(dt, to_snake_case)
 
 dt <- here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
   fread(nrows = 100)
-setnames(dt, to_snake_case(names(dt)))
+setnames(dt, to_snake_case)
 ```
 
 ## Making a function to add numbers
@@ -79,7 +79,7 @@ add_numbers(1, 2)
 read <- function(file_path) {
   dt <- file_path |>
     fread(nrows = 100)
-  setnames(dt, to_snake_case(names(dt)))
+  setnames(dt, to_snake_case)
   return(dt)
 }
 ```
@@ -102,8 +102,8 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 #'
 read <- function(file_path, n_rows = 100) {
   dt <- file_path |>
-    fread(nrows = n_rows)
-  setnames(dt, to_snake_case(names(dt)))
+    data.table::fread(nrows = n_rows)
+  data.table::setnames(dt, snakecase::to_snake_case)
   return(dt)
 }
 ```
