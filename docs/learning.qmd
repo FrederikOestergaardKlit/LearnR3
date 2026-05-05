@@ -17,7 +17,8 @@ library(tidyverse)
 
 ```{r}
 dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
-  fread(nrows = 100) 
+  fread(nrows = 100)
+setnames(dt, to_snake_case(names(dt)))
 
 here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
   read_csv(
@@ -25,5 +26,25 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
     name_repair = to_snake_case,
     n_max = 100
   )
+```
 
+
+## Exercise: Reading other file
+
+```{r}
+dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  fread()
+setnames(dt, to_snake_case(names(dt)))
+
+dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
+  fread(nrows = 100)
+setnames(dt, to_snake_case(names(dt)))
+
+dt <- here("data-raw/nurses-stress/stress/6b/6B_1587569373/EDA.csv.gz") |>
+  fread()
+setnames(dt, to_snake_case(names(dt)))
+
+dt <- here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") |>
+  fread(nrows = 100)
+setnames(dt, to_snake_case(names(dt)))
 ```
