@@ -7,9 +7,23 @@ format: html
 ## Header 1
 
 ```{r setup}
-#| include: false
+library(data.table)
+library(here)
+library(snakecase)
+library(tidyverse)
 ```
 
+## Importing new data
+
 ```{r}
-# Code chunk
+dt <- here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
+  fread(nrows = 100) 
+
+here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
+  read_csv(
+    show_col_types = FALSE,
+    name_repair = to_snake_case,
+    n_max = 100
+  )
+
 ```
