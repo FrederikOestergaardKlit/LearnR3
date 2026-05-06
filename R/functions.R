@@ -5,13 +5,13 @@
 #' Read in one nurses' stress data file.
 #'
 #' @param file_path Path to the data file.
-#' @param n_rows Number of rows to read in.
+#' @param max_rows Number of rows to read in.
 #'
 #' @returns Outputs a data.table.
 #'
-read <- function(file_path, n_rows = 100) {
+read <- function(file_path, max_rows = 100) {
   dt <- file_path |>
-    data.table::fread(nrows = n_rows)
+    data.table::fread(nrows = max_rows)
   data.table::setnames(dt, snakecase::to_snake_case)
   return(dt)
 }
@@ -25,12 +25,12 @@ read <- function(file_path, n_rows = 100) {
 #' @export
 #'
 #' @examples
-read_all <- function(filename, n_rows = 100) {
+read_all <- function(filename, max_rows = 100) {
   files <- .DATASET_DIR |>
     fs::dir_ls(regexp = filename, recurse = TRUE)
 
   data <- files |>
-    lapply(\(file) read(file, n_rows = n_rows)) |>
+    lapply(\(file) read(file, max_rows = max_rows)) |>
     data.table::rbindlist(idcol = "source")
 
   return(data)
@@ -80,4 +80,18 @@ summarise_by_datetime <- function(data) {
       .by = c(id, collection_datetime)
     )
   return(summarised_data)
+}
+
+#' Combinning the reading, cleaning of id and summarising in one go
+#'
+#' @param filename the file extensions to read
+#' @param max_rows number of rows to read
+#'
+#' @returns the read data frame
+#'
+read_sensor_data <- function(filename, max_rows = 100) {
+  data <- read_all(filename, max_rows = max_rows) |>
+    get_participant_id() |>
+    summarise_by_datetime()
+  return(data)
 }

@@ -221,8 +221,6 @@ hr_data |>
 
 
 ```{r}
-
-
 hr_data |> 
 summarise_by_datetime()
 ```

@@ -8,8 +8,21 @@ format: html
 
 ```{r setup}
 #| include: false
+source(here::here("R/functions.R"))
+```
+
+## Reading in data
+```{r}
+hr_data <- read_sensor_data("HR.csv.gz")
+
+ibi_data <- read_sensor_data("IBI.csv.gz")
+
+temp_data <- read_sensor_data("TEMP.csv.gz")
+
+bvp_data <- read_sensor_data("BVP.csv.gz")
+
+eda_data <- read_sensor_data("EDA.csv.gz")
 ```
 
 ```{r}
-# Code chunk
 ```
