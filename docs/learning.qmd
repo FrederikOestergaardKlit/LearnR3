@@ -10,6 +10,7 @@ format: html
 library(tidyverse)
 library(data.table)
 library(here)
+library(fs)
 source(here("R/functions.R"))
 ```
 
@@ -55,7 +56,7 @@ setnames(dt, to_snake_case)
 ## Making a function to add numbers
 
 ```{r}
-# Its a roxy to explain the function
+# Its a roxy - explains the function
 #' Add two numbers together
 #'
 #' @param num1 A number here.
@@ -111,4 +112,20 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 # Outputs all rows (`Inf` means infinity)
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   read(n_rows = Inf)
+```
+
+
+## Using map
+
+```{r}
+hr_files <- here("data-raw/nurses-stress/stress/") |>
+  dir_ls(regexp = "HR.csv.gz", recurse = TRUE)
+
+hr_data <- hr_files |>
+  map(read) |>
+  list_rbind(names_to = "file_path_id")
+
+hr_data_l <- hr_files |>
+  lapply(read) |>
+  rbindlist(idcol = "source")
 ```
