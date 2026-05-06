@@ -168,11 +168,61 @@ hr_data
 survey_data
 ```
 
+## Working with across
+
 ```{r}
-hr_data |> 
+hr_data <- read_all("HR.csv.gz") |>
   get_participant_id()
 ```
 
 ```{r}
-
+hr_data |> 
+  summarise(
+    across(
+      where(is.numeric),
+      list(
+        mean = mean,
+        median = median,
+        sd = sd
+      )
+    )
+  )
 ```
+
+## Working with dates
+
+```{r}
+hr_data |> 
+  mutate(datetime = round_date(collection_datetime, unit = "minute"), 
+         .before = collection_datetime)
+
+hr_data |> 
+  mutate(datetime = date_round(collection_datetime, "minute"))
+```
+
+## Summarising by groups
+
+```{r}
+hr_data |> 
+  mutate(
+    collection_datetime = round_date(
+      collection_datetime, 
+      unit = "minute"
+    )
+  ) |> 
+  summarise(
+    across(
+      where(is.numeric),
+      list(mean = mean, sd = sd, median = median)
+    ),
+    .by = c(id, collection_datetime)
+  )
+```
+
+
+
+
+
+
+
+

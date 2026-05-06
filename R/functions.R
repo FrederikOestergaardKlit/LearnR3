@@ -49,11 +49,11 @@ get_participant_id <- function(data) {
   data_with_id <- data |>
     dplyr::mutate(
       id = stringr::str_extract(
-        file_path_id,
+        source,
         "(?<=/stress/)[:alnum:]{2}(?=/)"
       ),
-      .before = file_path_id
+      .before = source
     ) |>
-    dplyr::select(-file_path_id)
+    dplyr::select(-source)
   return(data_with_id)
 }
