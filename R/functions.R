@@ -35,3 +35,25 @@ read_all <- function(filename, n_rows = 100) {
 
   return(data)
 }
+
+
+#' Extracts participant id from the file path
+#'
+#' @param data used data frame
+#'
+#' @returns returns the data frame with the file path column converted to an id coloumn
+#' @export
+#'
+#' @examples
+get_participant_id <- function(data) {
+  data_with_id <- data |>
+    dplyr::mutate(
+      id = stringr::str_extract(
+        file_path_id,
+        "(?<=/stress/)[:alnum:]{2}(?=/)"
+      ),
+      .before = file_path_id
+    ) |>
+    dplyr::select(-file_path_id)
+  return(data_with_id)
+}

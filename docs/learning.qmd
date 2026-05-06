@@ -145,22 +145,34 @@ hr_data_l <- hr_files |>
 #' @examples
 read_all <- function(filename, n_rows = 100) {
   files <- here::here("data-raw/nurses-stress/stress/") |>
-  fs::dir_ls(regexp = filename, recurse = TRUE)
-  
+    fs::dir_ls(regexp = filename, recurse = TRUE)
+
   data <- files |>
-  lapply(\(file) read(file, n_rows = n_rows)) |>
-  data.table::rbindlist(idcol = "source")
-  
+    lapply(\(file) read(file, n_rows = n_rows)) |>
+    data.table::rbindlist(idcol = "source")
+
   return(data)
 }
 ```
 
 
+## Inspecting the data
 
+```{r}
+hr_data <- read_all("HR.csv.gz")
 
+survey_data <- here("data-raw/nurses-stress/survey-results.csv.gz") |>
+  read()
 
+hr_data
+survey_data
+```
 
+```{r}
+hr_data |> 
+  get_participant_id()
+```
 
+```{r}
 
-
-
+```
