@@ -107,11 +107,11 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
 
 # Outputs only 1000 rows
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
-  read(n_rows = 1000)
+  read(max_rows = 1000)
 
 # Outputs all rows (`Inf` means infinity)
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
-  read(n_rows = Inf)
+  read(max_rows = Inf)
 ```
 
 
@@ -124,10 +124,6 @@ hr_files <- here("data-raw/nurses-stress/stress/") |>
 hr_data <- hr_files |>
   map(read) |>
   list_rbind(names_to = "file_path_id")
-
-hr_data_l <- hr_files |>
-  lapply(read) |>
-  rbindlist(idcol = "source")
 ```
 
 ## Exercise: Convert map to function and use on sleep
@@ -222,7 +218,28 @@ hr_data |>
 
 ```{r}
 hr_data |> 
-summarise_by_datetime()
+summarise_by_datetime(, fns = list(mean = mean, sd = sd, median = median))
+```
+
+## Pivot longer
+
+```{r}
+survey_data <- 
+  here("data/raw/nurses-stress/survey-results.csv.gz") |> 
+  read()
+
+survey_data
+```
+
+```{r}
+survey_tidy <- survey_data |> 
+  mutate(date = mdy(date),
+         start_datetime = as_datetime(paste(date, start_time)),
+         end_datetime = as_datetime(paste(date, end_time)),
+         datetime_id = start_datetime,
+         .before = start_time
+         ) |> 
+  select(-c(date, start_time, end_time, duration))
 ```
 
 
