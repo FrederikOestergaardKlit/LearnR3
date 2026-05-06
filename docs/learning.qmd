@@ -129,3 +129,38 @@ hr_data_l <- hr_files |>
   lapply(read) |>
   rbindlist(idcol = "source")
 ```
+
+## Exercise: Convert map to function and use on sleep
+
+```{r}
+#| eval: false
+
+#' Function reading all files within the nurses-stress stress subfolder
+#'
+#' @param filename Specifies the file type you want to load
+#'
+#' @returns a data.table
+#' @export
+#'
+#' @examples
+read_all <- function(filename, n_rows = 100) {
+  files <- here::here("data-raw/nurses-stress/stress/") |>
+  fs::dir_ls(regexp = filename, recurse = TRUE)
+  
+  data <- files |>
+  lapply(\(file) read(file, n_rows = n_rows)) |>
+  data.table::rbindlist(idcol = "source")
+  
+  return(data)
+}
+```
+
+
+
+
+
+
+
+
+
+
