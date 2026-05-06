@@ -13,7 +13,8 @@ Imports:
     lubridate,
     purrr,
     snakecase,
-    stringr
+    stringr,
+    tidyselect
 Depends: 
     tidyverse
 Suggests: 

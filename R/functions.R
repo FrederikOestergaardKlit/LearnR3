@@ -57,3 +57,27 @@ get_participant_id <- function(data) {
     dplyr::select(-source)
   return(data_with_id)
 }
+
+
+#' Summarise datetime to minutes
+#'
+#' @param data The dataset used
+#'
+#' @returns returns a new datset with mean, median and sd by id and collection_datetime
+summarise_by_datetime <- function(data) {
+  summarised_data <- data |>
+    dplyr::mutate(
+      collection_datetime = lubridate::round_date(
+        collection_datetime,
+        unit = "minute"
+      )
+    ) |>
+    dplyr::summarise(
+      dplyr::across(
+        dplyr::where(is.numeric),
+        list(mean = mean, sd = sd, median = median)
+      ),
+      .by = c(id, collection_datetime)
+    )
+  return(summarised_data)
+}
