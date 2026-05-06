@@ -13,15 +13,17 @@ source(here::here("R/functions.R"))
 
 ## Reading in data
 ```{r}
-hr_data <- read_sensor_data("HR.csv.gz")
+sum_stat <- list(mean = mean, median = median, sd = sd)
 
-ibi_data <- read_sensor_data("IBI.csv.gz")
+hr_data <- read_sensor_data("HR.csv.gz",     fns = sum_stat)
 
-temp_data <- read_sensor_data("TEMP.csv.gz")
+ibi_data <- read_sensor_data("IBI.csv.gz",   fns = sum_stat)
 
-bvp_data <- read_sensor_data("BVP.csv.gz")
+temp_data <- read_sensor_data("TEMP.csv.gz", fns = sum_stat)
 
-eda_data <- read_sensor_data("EDA.csv.gz")
+bvp_data <- read_sensor_data("BVP.csv.gz",   fns = sum_stat)
+
+eda_data <- read_sensor_data("EDA.csv.gz",   fns = sum_stat)
 ```
 
 ```{r}

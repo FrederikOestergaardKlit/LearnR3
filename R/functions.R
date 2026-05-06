@@ -62,20 +62,22 @@ get_participant_id <- function(data) {
 #' Summarise datetime to minutes
 #'
 #' @param data The dataset used
+#' @param unit the date time rounding unit
+#' @param fns the functions to summarise with in dplyr summarise
 #'
 #' @returns returns a new datset with mean, median and sd by id and collection_datetime
-summarise_by_datetime <- function(data) {
+summarise_by_datetime <- function(data, fns, unit = "minutes") {
   summarised_data <- data |>
     dplyr::mutate(
       collection_datetime = lubridate::round_date(
         collection_datetime,
-        unit = "minute"
+        unit = unit
       )
     ) |>
     dplyr::summarise(
       dplyr::across(
         dplyr::where(is.numeric),
-        list(mean = mean, sd = sd, median = median)
+        fns
       ),
       .by = c(id, collection_datetime)
     )
@@ -86,12 +88,14 @@ summarise_by_datetime <- function(data) {
 #'
 #' @param filename the file extensions to read
 #' @param max_rows number of rows to read
+#' @param unit the date time rounding unit
+#' @param fns the functions to summarise with in dplyr summarise
 #'
 #' @returns the read data frame
 #'
-read_sensor_data <- function(filename, max_rows = 100) {
+read_sensor_data <- function(filename, max_rows = 100, fns, unit = "minute") {
   data <- read_all(filename, max_rows = max_rows) |>
     get_participant_id() |>
-    summarise_by_datetime()
+    summarise_by_datetime(fns = fns, unit = unit)
   return(data)
 }
