@@ -9,7 +9,7 @@
 #'
 #' @returns Outputs a data.table.
 #'
-read <- function(file_path, max_rows = 100) {
+read <- function(file_path, max_rows = Inf) {
   dt <- file_path |>
     data.table::fread(nrows = max_rows)
   data.table::setnames(dt, snakecase::to_snake_case)
@@ -25,7 +25,7 @@ read <- function(file_path, max_rows = 100) {
 #' @export
 #'
 #' @examples
-read_all <- function(filename, max_rows = 100) {
+read_all <- function(filename, max_rows = Inf) {
   files <- .DATASET_DIR |>
     fs::dir_ls(regexp = filename, recurse = TRUE)
 
@@ -93,7 +93,7 @@ summarise_by_datetime <- function(data, fns, unit = "minutes") {
 #'
 #' @returns the read data frame
 #'
-read_sensor_data <- function(filename, max_rows = 100, fns, unit = "minute") {
+read_sensor_data <- function(filename, max_rows = Inf, fns, unit = "minute") {
   data <- read_all(filename, max_rows = max_rows) |>
     get_participant_id() |>
     summarise_by_datetime(fns = fns, unit = unit)
