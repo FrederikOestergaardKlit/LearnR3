@@ -15,16 +15,42 @@ source(here::here("R/functions.R"))
 ```{r}
 sum_stat <- list(mean = mean, median = median, sd = sd)
 
-hr_data <- read_sensor_data("HR.csv.gz",     fns = sum_stat)
+hr_data <- read_sensor_data("HR.csv.gz", fns = sum_stat)
 
-ibi_data <- read_sensor_data("IBI.csv.gz",   fns = sum_stat)
+ibi_data <- read_sensor_data("IBI.csv.gz", fns = sum_stat)
 
 temp_data <- read_sensor_data("TEMP.csv.gz", fns = sum_stat)
 
-bvp_data <- read_sensor_data("BVP.csv.gz",   fns = sum_stat)
+bvp_data <- read_sensor_data("BVP.csv.gz", fns = sum_stat)
 
-eda_data <- read_sensor_data("EDA.csv.gz",   fns = sum_stat)
+eda_data <- read_sensor_data("EDA.csv.gz", fns = sum_stat)
 ```
 
+## Process survey data
 ```{r}
+survey_tidy <- here::here("data-raw/nurses-stress/survey-results.csv.gz") |>
+  read() |>
+  tidy_survey_dates()
+
+survey_long <- survey_tidy |>
+  survey_to_long()
+```
+
+## Joining datasets
+```{r}
+nurses_stress <- survey_long |>
+  full_join(survey_tidy) |>
+  full_join(hr_data) |>
+  full_join(ibi_data) |>
+  full_join(temp_data) |>
+  full_join(bvp_data) |>
+  full_join(eda_data)
+View(nurses_stress)
+```
+
+## Save the nurses_stress dataset
+
+```{r}
+nurses_stress |>
+  write_csv(here::here("data/nurses-stress.csv"))
 ```

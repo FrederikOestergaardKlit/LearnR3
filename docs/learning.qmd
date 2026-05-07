@@ -226,8 +226,7 @@ hr_data |>
 ## Pivot longer
 
 ```{r}
-survey_data <-
-  here("data-raw/nurses-stress/survey-results.csv.gz") |>
+survey_data <- here("data-raw/nurses-stress/survey-results.csv.gz") |>
   read()
 ```
 
@@ -236,7 +235,26 @@ survey_tidy <- tidy_survey_dates(survey_data)
 survey_long <- survey_to_long(survey_tidy)
 ```
 
-
+## Joining datasets
 ```{r}
+#survey_long |> 
+#  left_join(survey_tidy)
 
+#survey_tidy |> 
+#  count(id, datetime_id) |> 
+#  filter(n > 1)
+
+#survey_long |> 
+#  right_join(survey_tidy)
+
+#survey_long |> 
+#  full_join(survey_tidy)
+
+nurses_stress <- survey_long |>
+  full_join(survey_tidy) |>
+  full_join(hr_data)
+
+nurses_stress |>
+  arrange(id, collection_datetime) |>
+  View()
 ```
