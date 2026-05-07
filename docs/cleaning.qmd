@@ -39,18 +39,17 @@ survey_long <- survey_tidy |>
 ## Joining datasets
 ```{r}
 nurses_stress <- survey_long |>
-  full_join(survey_tidy) |>
-  full_join(hr_data) |>
-  full_join(ibi_data) |>
-  full_join(temp_data) |>
-  full_join(bvp_data) |>
-  full_join(eda_data)
-View(nurses_stress)
+  dplyr::full_join(survey_tidy) |>
+  dplyr::full_join(hr_data) |>
+  dplyr::full_join(ibi_data) |>
+  dplyr::full_join(temp_data) |>
+  dplyr::full_join(bvp_data) |>
+  dplyr::full_join(eda_data)
 ```
 
 ## Save the nurses_stress dataset
 
 ```{r}
 nurses_stress |>
-  write_csv(here::here("data/nurses-stress.csv"))
+  readr::write_csv(here::here("data/nurses-stress.csv"))
 ```
