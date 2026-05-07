@@ -99,3 +99,24 @@ read_sensor_data <- function(filename, max_rows = 100, fns, unit = "minute") {
     summarise_by_datetime(fns = fns, unit = unit)
   return(data)
 }
+
+
+
+#' Tidying survey data to make it ready for combining with the other data sets
+#'
+#' @param data survey data
+#'
+#' @returns tidy data
+#'
+tidy_survey_dates <- function(data) {
+  tidied <- data |>
+    dplyr::mutate(
+      date = lubridate::mdy(date),
+      start_datetime = lubridate::as_datetime(paste(date, start_time)),
+      end_datetime = lubridate::as_datetime(paste(date, end_time)),
+      datetime_id = start_datetime,
+      .before = start_time
+    ) |>
+    dplyr::select(-c(date, start_time, end_time, duration))
+  return(tidied)
+}

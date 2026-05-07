@@ -172,7 +172,7 @@ hr_data <- read_all("HR.csv.gz") |>
 ```
 
 ```{r}
-hr_data |> 
+hr_data |>
   summarise(
     across(
       where(is.numeric),
@@ -188,24 +188,26 @@ hr_data |>
 ## Working with dates
 
 ```{r}
-hr_data |> 
-  mutate(datetime = round_date(collection_datetime, unit = "minute"), 
-         .before = collection_datetime)
+hr_data |>
+  mutate(
+    datetime = round_date(collection_datetime, unit = "minute"),
+    .before = collection_datetime
+  )
 
-hr_data |> 
-  mutate(datetime = date_round(collection_datetime, "minute"))
+# hr_data |>
+#  mutate(datetime = date_round(collection_datetime, "minute"))
 ```
 
 ## Summarising by groups
 
 ```{r}
-hr_data |> 
+hr_data |>
   mutate(
     collection_datetime = round_date(
-      collection_datetime, 
+      collection_datetime,
       unit = "minute"
     )
-  ) |> 
+  ) |>
   summarise(
     across(
       where(is.numeric),
@@ -217,33 +219,32 @@ hr_data |>
 
 
 ```{r}
-hr_data |> 
-summarise_by_datetime(, fns = list(mean = mean, sd = sd, median = median))
+hr_data |>
+  summarise_by_datetime(, fns = list(mean = mean, sd = sd, median = median))
 ```
 
 ## Pivot longer
 
 ```{r}
-survey_data <- 
-  here("data/raw/nurses-stress/survey-results.csv.gz") |> 
+survey_data <-
+  here("data-raw/nurses-stress/survey-results.csv.gz") |>
   read()
-
-survey_data
 ```
 
 ```{r}
-survey_tidy <- survey_data |> 
-  mutate(date = mdy(date),
-         start_datetime = as_datetime(paste(date, start_time)),
-         end_datetime = as_datetime(paste(date, end_time)),
-         datetime_id = start_datetime,
-         .before = start_time
-         ) |> 
-  select(-c(date, start_time, end_time, duration))
+survey_tidy <- tidy_survey_dates(survey_data)
+survey_long <- survey_to_long(survey_tidy)
 ```
 
 
-
-
-
-
+```{r}
+survey_tidy |>
+  dplyr::select(id, datetime_id, start_datetime, end_datetime) |>
+  tidyr::pivot_longer(c(start_datetime, end_datetime), names_to = NULL, values_to = "collection_datetime") |>
+  dplyr::group_by(dplyr::pick(-collection_datetime)) |>
+  tidyr::complete(collection_datetime = seq(min(collection_datetime),
+    max(collection_datetime),
+    by = 60
+  )) |>
+  dplyr::ungroup()
+```
